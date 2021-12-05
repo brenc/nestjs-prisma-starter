@@ -42,7 +42,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "start:db": "npm run migrate:up && npm run prisma:generate && npm run seed",
     "seed": "prisma db seed",
-    "postinstall": "npm run prisma:generate",
     "docker:migrate": "docker-compose -f docker-compose.migrate.yml up -d",
     "docker:db": "docker-compose -f docker-compose.db.yml up -d",
     "docker:seed": "docker exec -it nest-api npm run seed",
@@ -64,6 +63,7 @@
     "bcrypt": "5.0.1",
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
+    "global": "^4.4.0",
     "graphql": "15.6.0",
     "graphql-subscriptions": "1.2.1",
     "nestjs-prisma": "^0.13.2",
@@ -75,7 +75,7 @@
     "swagger-ui-express": "4.1.6"
   },
   "devDependencies": {
-    "@nestjs/cli": "8.1.1",
+    "@nestjs/cli": "^8.1.5",
     "@nestjs/testing": "8.0.6",
     "@types/bcrypt": "5.0.0",
     "@types/chance": "1.1.3",
