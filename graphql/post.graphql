@@ -1,5 +1,5 @@
 query UserPosts {
-  userPosts(userId: "USER_ID") {
+  userPosts(userId: 1) {
     ...PostData
   }
 }
