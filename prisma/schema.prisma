@@ -1,8 +1,3 @@
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,16 +6,25 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// I like to keep the database design as independent from any ORM/framework as
+// possible. Therefore, I use some database specific features (vs. Prisma)
+// like timestamp columns, auto increment IDs, etc. I also map table and column
+// names to lower case letters with underscores.
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp(0)
   email     String   @unique
   password  String
   firstname String?
   lastname  String?
+  role      Role     @default(USER)
   posts     Post[]
-  role      Role
 
   @@map("users")
 }
@@ -28,12 +32,12 @@ model User {
 model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp(0)
   published Boolean
   title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  content   String
   authorId  Int      @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
