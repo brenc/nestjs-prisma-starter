@@ -5,7 +5,6 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  // previewFeatures = []
 }
 
 generator dbml {
@@ -13,26 +12,30 @@ generator dbml {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map("updated_at") @db.Timestamp
   email     String   @unique
   password  String
   firstname String?
   lastname  String?
   posts     Post[]
   role      Role
+
+  @@map("users")
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map("updated_at") @db.Timestamp
   published Boolean
   title     String
   content   String?
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId  Int      @map("author_id")
+
+  @@map("posts")
 }
 
 enum Role {
