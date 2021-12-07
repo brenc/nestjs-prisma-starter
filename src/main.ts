@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,8 +10,12 @@ import {
   SwaggerConfig,
 } from './configs/config.interface';
 
+const logger = new Logger('main.ts');
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: process.env.NODE_ENV === 'development' ? ['debug'] : ['log'],
+  });
 
   // Validation
   app.useGlobalPipes(new ValidationPipe());
@@ -42,6 +46,8 @@ async function bootstrap() {
     app.enableCors();
   }
 
-  await app.listen(process.env.PORT || nestConfig.port || 3000);
+  await app.listen(process.env.PORT || nestConfig.port || 3000, () => {
+    logger.log(`listening on port ${nestConfig.port || 3000}`);
+  });
 }
 bootstrap();

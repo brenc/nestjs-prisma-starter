@@ -15,6 +15,7 @@ import { PrismaModule } from 'nestjs-prisma';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
         const graphqlConfig = configService.get<GraphqlConfig>('graphql');
@@ -33,14 +34,20 @@ import { PrismaModule } from 'nestjs-prisma';
       },
       inject: [ConfigService],
     }),
+
     PrismaModule.forRoot({
       isGlobal: true,
     }),
+
     AuthModule,
+
     UserModule,
+
     PostModule,
   ],
+
   controllers: [AppController],
+
   providers: [AppService, AppResolver, DateScalar],
 })
 export class AppModule {}

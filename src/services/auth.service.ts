@@ -22,6 +22,7 @@ export class AuthService {
     private readonly passwordService: PasswordService,
     private readonly configService: ConfigService
   ) {}
+  // private readonly logger = new Logger(AuthService.name);
 
   async createUser(payload: SignupInput): Promise<Token> {
     const hashedPassword = await this.passwordService.hashPassword(
