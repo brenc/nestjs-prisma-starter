@@ -46,9 +46,12 @@ async function bootstrap() {
     app.enableCors();
   }
 
-  await app.listen(process.env.PORT || nestConfig.port || 3000, () => {
-    logger.log(
-      `listening on port ${process.env.PORT || nestConfig.port || 3000}`
+  const port = process.env.PORT || nestConfig.port || 3000;
+  await app.listen(port, () => {
+    // If the app unexpectedly restarts, this will general an alert message in
+    // production.
+    logger.error(
+      `app (re)-started on port ${port} (env is ${process.env.NODE_ENV})`
     );
   });
 }

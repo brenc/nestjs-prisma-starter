@@ -17,8 +17,27 @@ import * as Joi from 'joi';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+
       load: [config],
+
+      validationOptions: {
+        abortEarly: false,
+        allowUnknown: true,
+      },
+
       validationSchema: Joi.object({
+        DB_HOST: Joi.string().required(),
+
+        DB_URL: Joi.string().required(),
+
+        DB_USER: Joi.string().required(),
+
+        JWT_ACCESS_SECRET: Joi.string().required(),
+
+        JWT_REFRESH_SECRET: Joi.string().required(),
+
+        MYSQL_ROOT_PASSWORD: Joi.string().required(),
+
         NODE_ENV: Joi.string()
           .valid('development', 'production')
           .default('development'),
@@ -30,19 +49,27 @@ import * as Joi from 'joi';
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
         const graphqlConfig = configService.get<GraphqlConfig>('graphql');
+
         return {
           installSubscriptionHandlers: true,
+
           buildSchemaOptions: {
             numberScalarMode: 'integer',
           },
+
           sortSchema: graphqlConfig.sortSchema,
+
           autoSchemaFile:
             graphqlConfig.schemaDestination || './src/schema.graphql',
+
           debug: graphqlConfig.debug,
+
           playground: graphqlConfig.playgroundEnabled,
+
           context: ({ req }) => ({ req }),
         };
       },
+
       inject: [ConfigService],
     }),
 

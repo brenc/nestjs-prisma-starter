@@ -1,18 +1,17 @@
-version: '3.8'
+version: '3.9'
 services:
   api:
     build:
+      # UID and USER need to be exported e.g.:
+      # export UID USER
+      # This allows compose to run the app as the local development user.
       args:
-        - NODE_ENV
         - UID
         - USER
       context: .
       target: development
     depends_on:
       - db
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
     env_file: .env
     ports:
       - 4000:3000
@@ -30,10 +29,6 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-    environment:
-      PMA_HOST: db
-    # PMA_PASSWORD
-    # PMA_USER
     env_file: .env
     ports:
       - 4001:80

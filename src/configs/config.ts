@@ -2,7 +2,8 @@ import { Config } from './config.interface';
 
 const config: Config = {
   nest: {
-    port: 666,
+    // The env var PORT takes precendence.
+    port: 3000,
   },
   cors: {
     enabled: true,
@@ -15,8 +16,8 @@ const config: Config = {
     path: 'api',
   },
   graphql: {
-    playgroundEnabled: true,
-    debug: true,
+    playgroundEnabled: process.env.NODE_ENV === 'development',
+    debug: process.env.NODE_ENV === 'development',
     schemaDestination: './src/schema.graphql',
     sortSchema: true,
   },
