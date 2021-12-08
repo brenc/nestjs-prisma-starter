@@ -11,10 +11,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from './configs/config';
 import { GraphqlConfig } from './configs/config.interface';
 import { PrismaModule } from 'nestjs-prisma';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string()
+          .valid('development', 'production')
+          .default('development'),
+
+        PORT: Joi.number().default(3000),
+      }),
+    }),
 
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {

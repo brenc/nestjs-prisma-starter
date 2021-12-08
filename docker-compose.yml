@@ -10,9 +10,12 @@ services:
       target: development
     depends_on:
       - db
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
     env_file: .env
     ports:
-      - 4000:4000
+      - 4000:3000
     restart: unless-stopped
     volumes:
       - ${PWD}:/app

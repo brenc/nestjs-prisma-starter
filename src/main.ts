@@ -47,7 +47,9 @@ async function bootstrap() {
   }
 
   await app.listen(process.env.PORT || nestConfig.port || 3000, () => {
-    logger.log(`listening on port ${nestConfig.port || 3000}`);
+    logger.log(
+      `listening on port ${process.env.PORT || nestConfig.port || 3000}`
+    );
   });
 }
 bootstrap();
